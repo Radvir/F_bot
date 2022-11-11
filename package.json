@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Radvir/F_bot/issues"
   },
-  "homepage": "https://github.com/Radvir/F_bot#readme"
+  "homepage": "https://github.com/Radvir/F_bot#readme",
+  "dependencies": {
+    "discord.js": "^13.6.0"
+  }
 }
