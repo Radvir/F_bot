@@ -1,6 +1,7 @@
 const { token, prefix } = require('./config.json');
 const discord = require('discord.js');
 const client = new discord.Client({intents: new discord.Intents(32767)});
+require('./slash-register')();
 
 client.on('ready', () => {
     console.log(client.user.tag + " elindult!")
