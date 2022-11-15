@@ -1,29 +1,25 @@
 const { token, prefix } = require('./config.json');
 const discord = require('discord.js');
 const client = new discord.Client({intents: new discord.Intents(32767)});
-require('./slash-register')();
+/*const comregist = require('./slash-register')(false);
+comregist();*/
+require('./slash-register')(true)
+let commands = require('./slash-register').commands;
 
 client.on('ready', () => {
     console.log(client.user.tag + " elindult!")
 
-    let commands = client.application.commands;
-    commands.create({
-        name : "hello",
-        description: "welcoming message"
-    });
 })
 
-client.on('interactionCreate', interaction => {
+client.on('interactionCreate', async interaction => {
     if(!interaction.isCommand) return;
     let name = interaction.commandName;
     let optins = interaction.optins;
 
-    if (name == "hello"){
-        interaction.reply({
-            content: "hello",
-            ephemeral: true
-        })
-    }
+    let commandMethod = commands.get(name);
+    if(!commandMethod) return;
+    await interaction.deferReply();
+    commandMethod(client, interaction);
 })
 
 
