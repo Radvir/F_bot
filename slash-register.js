@@ -19,6 +19,7 @@ module.exports = (updateCommands) => {
     if (updateCommands){
         (async () => {
             try {
+                console.log(commandList);
                 console.log('Started refreshing application (/) commands.');
 /*
                 await rest.put(
