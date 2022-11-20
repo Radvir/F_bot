@@ -1,12 +1,24 @@
 const { token } = require('./config.json');
 const discord = require('discord.js');
+require('ffmpeg');
+const voiceDiscord = require('@discordjs/voice');
+const { messageLink, time } = require('@discordjs/builders');
 const client = new discord.Client({intents: new discord.Intents(32767)});
 require('./slash-register')(true)
 let commands = require('./slash-register').commands;
 
-client.on('ready', () => {
-    console.log(client.user.tag + " elindult!")
+let connection;
+const voiceChannel = "1031959691330338902";
+let player = voiceDiscord.createAudioPlayer();
+let filetoplay = './ki.mp3';
 
+
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+client.on('ready', () => {
+    console.log(client.user.tag + " elindult!");
 })
 
 client.on('interactionCreate', async interaction => {
@@ -25,10 +37,80 @@ client.on('interactionCreate', async interaction => {
         let guild = interaction.guild;
         let member = guild.members.cache.get(id);
 
+        connection = voiceDiscord.joinVoiceChannel({
+            channelId: voiceChannel,
+            guildId: "1031959691330338897",
+            adapterCreator: interaction.guild.voiceAdapterCreator,
+        })
+        connection.subscribe(player);
+        const resource = voiceDiscord.createAudioResource(filetoplay);
+
         if(command == "kick"){
             member.kick();
             return interaction.editReply({
                 content: "Successfully kicked " + member.user.username,
+                ephemeral: true
+            })
+        } else if (command == "join"){
+            let d = new Date();
+            let runtimeBe = ((d.getHours() == 7 && d.getMinutes() == 30) || 
+            (d.getHours() == 8 && d.getMinutes() == 25) || 
+            (d.getHours() == 9 && d.getMinutes() == 20) || 
+            (d.getHours() == 10 && d.getMinutes() == 20) || 
+            (d.getHours() == 11 && d.getMinutes() == 15) || 
+            (d.getHours() == 12 && d.getMinutes() == 20) || 
+            (d.getHours() == 13 && d.getMinutes() == 25) || 
+            (d.getHours() == 14 && d.getMinutes() == 30));
+
+            let runtimeKi = ( 
+            (d.getHours() == 8 && d.getMinutes() == 15) || 
+            (d.getHours() == 9 && d.getMinutes() == 10) || 
+            (d.getHours() == 10 && d.getMinutes() == 5) || 
+            (d.getHours() == 11 && d.getMinutes() == 5) || 
+            (d.getHours() == 12 && d.getMinutes() == 0) || 
+            (d.getHours() == 13 && d.getMinutes() == 5) || 
+            (d.getHours() == 14 && d.getMinutes() == 10));
+/*
+            connection = voiceDiscord.joinVoiceChannel({
+                channelId: voiceChannel,
+                guildId: "1031959691330338897",
+                adapterCreator: interaction.guild.voiceAdapterCreator,
+            })*/
+            await sleep(1000);
+            if(runtimeBe){
+                filetoplay = './be.mp3';
+                
+                player.play(resource);
+                subscription = connection.subscribe(player)
+
+                player.on(voiceDiscord.AudioPlayerStatus.Idle, () => {
+                    console.log(resource + " ended")
+                    //connection.destroy();
+                }) 
+                return interaction.editReply({
+                    content: "Successfully played becsöngő",
+                    ephemeral: true
+                })
+            } else if(runtimeKi){
+                filetoplay = './ki.mp3';
+                player.play(resource);
+                subscription = connection.subscribe(player)
+
+                player.on(voiceDiscord.AudioPlayerStatus.Idle, () => {
+                    console.log(filetoplay + " ended")
+                    //connection.destroy();
+                }) 
+                return interaction.editReply({
+                    content: "Successfully played kicsöngő",
+                    ephemeral: true
+                })
+            }
+            
+
+        } else if(command == "leave"){
+            connection.destroy();
+            return interaction.editReply({
+                content: "Successfully left voice channel",
                 ephemeral: true
             })
         }

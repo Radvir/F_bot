@@ -3,8 +3,7 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports.data = new SlashCommandBuilder()
 .setName("vc")
-.setDescription("Manage Voice activiti")
-.addUserOption(option => option.setName("vc_id").setDescription("The id of the voice channel").setRequired(true));
+.setDescription("Manage Voice activiti");
 
 module.exports.run = (bot, interaction, options) => {
     let permission = interaction.member.permissions;
@@ -12,7 +11,7 @@ module.exports.run = (bot, interaction, options) => {
     
     let vc = options.getString("vc_id");
     let embed = new MessageEmbed()
-    .setTitle("Voice channel: " + vc.id)
+    .setTitle("Voice channel: ")
     .setDescription("To manage the activity click the buttons!")
     .setColor("AQUA");
 
@@ -21,12 +20,12 @@ module.exports.run = (bot, interaction, options) => {
         new MessageButton()
         .setLabel("Join")
         .setStyle("SUCCESS")
-        .setCustomId("join-" + vc.id),
+        .setCustomId("join-"),
 
         new MessageButton()
         .setLabel("Leave")
         .setStyle("DANGER")
-        .setCustomId("leave-" + vc.id)
+        .setCustomId("leave-")
     )
 
     return interaction.editReply({
