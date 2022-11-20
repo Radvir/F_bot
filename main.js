@@ -4,13 +4,14 @@ require('ffmpeg');
 const voiceDiscord = require('@discordjs/voice');
 const { messageLink, time } = require('@discordjs/builders');
 const client = new discord.Client({intents: new discord.Intents(32767)});
-require('./slash-register')(true)
+require('./slash-register')(false)
 let commands = require('./slash-register').commands;
 
 let connection;
 const voiceChannel = "1031959691330338902";
 let player = voiceDiscord.createAudioPlayer();
 let filetoplay = './ki.mp3';
+
 
 
 const sleep = (milliseconds) => {
@@ -37,13 +38,7 @@ client.on('interactionCreate', async interaction => {
         let guild = interaction.guild;
         let member = guild.members.cache.get(id);
 
-        connection = voiceDiscord.joinVoiceChannel({
-            channelId: voiceChannel,
-            guildId: "1031959691330338897",
-            adapterCreator: interaction.guild.voiceAdapterCreator,
-        })
-        connection.subscribe(player);
-        const resource = voiceDiscord.createAudioResource(filetoplay);
+        
 
         if(command == "kick"){
             member.kick();
@@ -70,49 +65,62 @@ client.on('interactionCreate', async interaction => {
             (d.getHours() == 12 && d.getMinutes() == 0) || 
             (d.getHours() == 13 && d.getMinutes() == 5) || 
             (d.getHours() == 14 && d.getMinutes() == 10));
-/*
+
             connection = voiceDiscord.joinVoiceChannel({
                 channelId: voiceChannel,
                 guildId: "1031959691330338897",
                 adapterCreator: interaction.guild.voiceAdapterCreator,
-            })*/
-            await sleep(1000);
-            if(runtimeBe){
-                filetoplay = './be.mp3';
-                
-                player.play(resource);
-                subscription = connection.subscribe(player)
+            })
+            
+            
 
-                player.on(voiceDiscord.AudioPlayerStatus.Idle, () => {
-                    console.log(resource + " ended")
-                    //connection.destroy();
-                }) 
-                return interaction.editReply({
-                    content: "Successfully played becsöngő",
-                    ephemeral: true
-                })
-            } else if(runtimeKi){
-                filetoplay = './ki.mp3';
+            await sleep(1000);
+            if(!runtimeBe){
+                filetoplay = './be.mp3';
+                let resource = voiceDiscord.createAudioResource(filetoplay);
                 player.play(resource);
-                subscription = connection.subscribe(player)
+                connection.subscribe(player)
 
                 player.on(voiceDiscord.AudioPlayerStatus.Idle, () => {
                     console.log(filetoplay + " ended")
                     //connection.destroy();
                 }) 
-                return interaction.editReply({
+                interaction.editReply({
+                    content: "Successfully played becsöngő",
+                    ephemeral: true
+                })
+            } else if(runtimeKi){
+                filetoplay = './ki.mp3';
+                let resource = voiceDiscord.createAudioResource(filetoplay);
+                player.play(resource);
+                connection.subscribe(player)
+
+                player.on(voiceDiscord.AudioPlayerStatus.Idle, () => {
+                    console.log(filetoplay + " ended")
+                    //connection.destroy();
+                }) 
+                interaction.editReply({
                     content: "Successfully played kicsöngő",
                     ephemeral: true
                 })
             }
-            
-
-        } else if(command == "leave"){
-            connection.destroy();
-            return interaction.editReply({
-                content: "Successfully left voice channel",
+            interaction.editReply({
+                content: "Successfully joined vc",
                 ephemeral: true
             })
+        } else if(command == "leave"){
+            if(connection != null){
+                connection.destroy();
+                return interaction.editReply({
+                    content: "Successfully left voice channel",
+                    ephemeral: true
+                })
+            } else {
+                return interaction.editReply({
+                    content: "Bot isn't in voice channel",
+                    ephemeral: false
+                })
+            }
         }
     }
 })
