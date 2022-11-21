@@ -3,7 +3,7 @@
 ## Release v1.1.0
 
 The bot has a basic functionality of playing two audio files __be.mp3__ and __Ki.mp3__.
-These are the audio files of tha ring of the school.
+These are the audio files of the bell of the school.
 
 ## Instructions
 1. Download the release
