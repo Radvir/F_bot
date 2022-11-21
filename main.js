@@ -108,6 +108,8 @@ client.on('interactionCreate', async interaction => {
                 content: "Successfully joined vc",
                 ephemeral: true
             })
+        }else if(command == "disconnect"){
+            
         } else if(command == "leave"){
             if(connection != null){
                 connection.destroy();
@@ -121,7 +123,7 @@ client.on('interactionCreate', async interaction => {
                     ephemeral: false
                 })
             }
-        }
+        } 
     }
 })
 
