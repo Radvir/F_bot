@@ -10,8 +10,7 @@ let commands = require('./slash-register').commands;
 let connection;
 const voiceChannel = "1031959691330338902";
 let player = voiceDiscord.createAudioPlayer();
-let filetoplay = './ki.mp3';
-
+let filetoplay;
 
 
 const sleep = (milliseconds) => {
@@ -40,13 +39,7 @@ client.on('interactionCreate', async interaction => {
 
         
 
-        if(command == "kick"){
-            member.kick();
-            return interaction.editReply({
-                content: "Successfully kicked " + member.user.username,
-                ephemeral: true
-            })
-        } else if (command == "join"){
+        if (command == "join"){
             let d = new Date();
             let runtimeBe = ((d.getHours() == 7 && d.getMinutes() == 30) || 
             (d.getHours() == 8 && d.getMinutes() == 25) || 
@@ -75,7 +68,7 @@ client.on('interactionCreate', async interaction => {
             
 
             await sleep(1000);
-            if(!runtimeBe){
+            if(runtimeBe){
                 filetoplay = './be.mp3';
                 let resource = voiceDiscord.createAudioResource(filetoplay);
                 player.play(resource);
@@ -83,7 +76,6 @@ client.on('interactionCreate', async interaction => {
 
                 player.on(voiceDiscord.AudioPlayerStatus.Idle, () => {
                     console.log(filetoplay + " ended")
-                    //connection.destroy();
                 }) 
                 interaction.editReply({
                     content: "Successfully played becsöngő",
@@ -108,9 +100,7 @@ client.on('interactionCreate', async interaction => {
                 content: "Successfully joined vc",
                 ephemeral: true
             })
-        }else if(command == "disconnect"){
-            
-        } else if(command == "leave"){
+        }else if(command == "leave"){
             if(connection != null){
                 connection.destroy();
                 return interaction.editReply({

@@ -3,13 +3,7 @@ const { MessageEmbed, MessageActionRow, MessageButton, VoiceChannel, BaseGuildVo
 
 module.exports.data = new SlashCommandBuilder()
 .setName("vc")
-.setDescription("Manage Voice activiti")
-.addChannelOption(option => {
-    option.setName('channel')
-    .setDescription('The channel to join into')
-    .addChannelTypes(VoiceChannel)
-})
-.toJSON();
+.setDescription("Manage Voice activiti");
 
 module.exports.run = (bot, interaction, options) => {
     let permission = interaction.member.permissions;
@@ -31,12 +25,7 @@ module.exports.run = (bot, interaction, options) => {
         new MessageButton()
         .setLabel("Leave")
         .setStyle("PRIMARY")
-        .setCustomId("leave-"),
-
-        new MessageButton()
-        .setLabel("Disconnect")
-        .setStyle("DANGER")
-        .setCustomId("disconnect-")
+        .setCustomId("leave-")
     )
 
     return interaction.editReply({
