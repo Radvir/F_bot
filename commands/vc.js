@@ -31,6 +31,5 @@ module.exports.run = (bot, interaction, options) => {
     return interaction.editReply({
         embeds: [embed],
         components: [row],
-        ephemeral: true
     })
 }

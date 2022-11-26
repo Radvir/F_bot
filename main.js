@@ -4,11 +4,12 @@ require('ffmpeg');
 const voiceDiscord = require('@discordjs/voice');
 const { messageLink, time } = require('@discordjs/builders');
 const client = new discord.Client({intents: new discord.Intents(32767)});
-require('./slash-register')(false)
+require('./slash-register')(false);
 let commands = require('./slash-register').commands;
 
 let connection;
-const voiceChannel = "1031959691330338902";
+const voiceChannel = "754237349180997644";
+const guildId = "688422208518750237";
 let player = voiceDiscord.createAudioPlayer();
 let filetoplay;
 
@@ -61,11 +62,10 @@ client.on('interactionCreate', async interaction => {
 
             connection = voiceDiscord.joinVoiceChannel({
                 channelId: voiceChannel,
-                guildId: "1031959691330338897",
+                guildId: guildId,
                 adapterCreator: interaction.guild.voiceAdapterCreator,
             })
-            
-            
+
 
             await sleep(1000);
             if(runtimeBe){
@@ -79,7 +79,6 @@ client.on('interactionCreate', async interaction => {
                 }) 
                 interaction.editReply({
                     content: "Successfully played becsöngő",
-                    ephemeral: true
                 })
             } else if(runtimeKi){
                 filetoplay = './ki.mp3';
@@ -93,24 +92,20 @@ client.on('interactionCreate', async interaction => {
                 }) 
                 interaction.editReply({
                     content: "Successfully played kicsöngő",
-                    ephemeral: true
                 })
             }
             interaction.editReply({
                 content: "Successfully joined vc",
-                ephemeral: true
             })
         }else if(command == "leave"){
             if(connection != null){
                 connection.destroy();
                 return interaction.editReply({
                     content: "Successfully left voice channel",
-                    ephemeral: true
                 })
             } else {
                 return interaction.editReply({
                     content: "Bot isn't in voice channel",
-                    ephemeral: false
                 })
             }
         } 
