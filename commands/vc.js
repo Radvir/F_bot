@@ -4,12 +4,12 @@ const { MessageEmbed, MessageActionRow, MessageButton, VoiceChannel, BaseGuildVo
 module.exports.data = new SlashCommandBuilder()
 .setName("vc")
 .setDescription("Manage Voice activiti")
-.addChannelOption(option => {
+/*.addChannelOption(option => {
     option.setName('channel')
     .setDescription('The channel to join into')
     .addChannelTypes(VoiceChannel)
 })
-.toJSON();
+.toJSON()*/;
 
 module.exports.run = (bot, interaction, options) => {
     let permission = interaction.member.permissions;
@@ -40,8 +40,9 @@ module.exports.run = (bot, interaction, options) => {
     )
 
     return interaction.editReply({
+        ephemeral: true,
         embeds: [embed],
         components: [row],
-        ephemeral: true
+        
     })
 }

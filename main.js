@@ -4,10 +4,11 @@ require('ffmpeg');
 const voiceDiscord = require('@discordjs/voice');
 const { messageLink, time } = require('@discordjs/builders');
 const client = new discord.Client({intents: new discord.Intents(32767)});
-require('./slash-register')(false)
+require('./slash-register')(true)
 let commands = require('./slash-register').commands;
 
 let connection;
+let guildId = "1031959691330338897";
 const voiceChannel = "1031959691330338902";
 let player = voiceDiscord.createAudioPlayer();
 let filetoplay = './ki.mp3';
@@ -68,7 +69,7 @@ client.on('interactionCreate', async interaction => {
 
             connection = voiceDiscord.joinVoiceChannel({
                 channelId: voiceChannel,
-                guildId: "1031959691330338897",
+                guildId: interaction.guildId,
                 adapterCreator: interaction.guild.voiceAdapterCreator,
             })
             
@@ -109,6 +110,25 @@ client.on('interactionCreate', async interaction => {
                 ephemeral: true
             })
         }else if(command == "disconnect"){
+            let dc_guild = new discord.Guild(client, {
+                id: guildId,
+            })
+            let vc_channel = new discord.VoiceChannel(dc_guild, {
+                id: voiceChannel,
+            });
+            //interaction.member.voice.disconnect("mert");
+            //console.log(vc_channel.name);
+            let vc_members = vc_channel.members;
+            console.log(vc_members);
+            for(let i = 0; i < vc_members.length; i++){
+                if(vc_members[i].isConnected())
+                vc_members[i].member.disconnect("mer");
+
+                interaction.editReply({
+                    content: "Successfully disconnected: " + vc_members[i].displayName,
+                })
+            }
+
             
         } else if(command == "leave"){
             if(connection != null){
