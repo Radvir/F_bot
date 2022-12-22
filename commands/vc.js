@@ -24,11 +24,6 @@ module.exports.run = (bot, interaction, options) => {
     const row = new MessageActionRow()
     .addComponents(
         new MessageButton()
-        .setLabel("Join")
-        .setStyle("SUCCESS")
-        .setCustomId("join-"),
-
-        new MessageButton()
         .setLabel("Leave")
         .setStyle("PRIMARY")
         .setCustomId("leave-"),
